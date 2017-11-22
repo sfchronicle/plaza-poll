@@ -170,15 +170,15 @@ draw_future();
 
 document.getElementById("submit").addEventListener("click", function() {
 
-  console.log(prevClick.id);
-
-  if (prevClick.id == "writeinicon") {
-    console.log(document.getElementById("writeininput").value);
-    if (document.getElementById("writeininput").value) {
-      chosenName = document.getElementById("writeininput").value;
-    } else {
-      document.getElementById("instructions-box-writein").classList.add("active");
-      document.getElementById("instructions-overlay").classList.add("active");
+  if (prevClick){
+    if (prevClick.id == "writeinicon") {
+      console.log(document.getElementById("writeininput").value);
+      if (document.getElementById("writeininput").value) {
+        chosenName = document.getElementById("writeininput").value;
+      } else {
+        document.getElementById("instructions-box-writein").classList.add("active");
+        document.getElementById("instructions-overlay").classList.add("active");
+      }
     }
   }
 

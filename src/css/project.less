@@ -1,0 +1,143 @@
+@dark-blue: #306BAC;
+
+#your-vote {
+  font-weight: 600;
+  color: @dark-blue;
+  font-style: italic;
+  text-decoration: underline;
+}
+
+text {
+  font-family: @banner;
+}
+
+.poll-hed {
+  font-weight: 600;
+  font-size: 20px;
+  padding-bottom: 10px;
+}
+.poll-deck {
+  font-size: 18px;
+}
+
+.poll-container {
+  max-width: 600px;
+  margin: 50px auto;
+  font-family: @banner;
+  line-height: 1.3;
+  padding: 30px;
+  border: 2px solid @dark-blue;
+  .question {
+    padding-bottom: 20px;
+    font-style: italic;
+  }
+  .answer {
+    padding-left: 40px;
+    font-weight: 600;
+    font-size: 18px;
+    padding-bottom: 5px;
+    cursor: pointer;
+    .fa-check-square-o {
+      padding-right: 17px;
+    }
+    .fa-square-o {
+      padding-right: 20px;
+    }
+  }
+}
+
+.plaza-img {
+  max-width: 400px;
+  padding-bottom: 20px;
+  img {
+    width: 100%;
+  }
+}
+
+input {
+  width: 300px;
+  // -webkit-appearance: none;
+  border: none;
+  border-bottom: 2px dotted @dark-gray;
+  background: lighten(@light-gray,15%);
+  height: 20px;
+  font-family: @banner;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 5px;
+  @media @mobile {
+    width: 60%;
+  }
+}
+
+.submit-answer {
+  margin-top: 20px;
+  padding: 5px;
+  font-size: 18px;
+  text-align: center;
+  border: 2px solid @dark-blue;
+  border-radius: 5px;
+  color: @dark-blue;
+  font-weight: 800;
+  width: 200px;
+  cursor: pointer;
+  &:hover {
+    background: @dark-blue;
+    color: white;
+  }
+}
+
+#poll-question {
+  &.hide {
+    display: none;
+  }
+}
+
+#poll-results {
+  &.hide {
+    display: none;
+  }
+}
+
+.overlay-instructions {
+  background: rgba(178, 178, 178, 0.4);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 1999;
+  display: none;
+  &.active {
+    display: block;
+  }
+}
+
+#instructions-box, #instructions-box-writein {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  right: 0;
+  text-align: left;
+  background: white;
+  padding: 20px;
+  border: 1px solid @dark-gray;
+  z-index: 2000;
+  margin:auto;
+  font-family: @banner;
+  max-width: 400px;
+  line-height: 1.4;
+  font-size: 16px;
+  display: none;
+  &.active {
+    display: block;
+  }
+  .close-button {
+    width: 100%;
+    height: 20px;
+    cursor: pointer;
+  }
+  .fa-times {
+    float: right;
+    font-size: 20px;
+    padding-bottom: 20px;
+  }
+}

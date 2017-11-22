@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <title><%= json.project.seo_title %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="__sync_contentCategory" content="meterA">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="http://projects.sfchronicle.com/shared/js/jquery.min.js"></script>
+
+    <%= !json.project.embedded ? t.include("partials/_paywall.html") : t.include("partials/_embedframe.html") %>
+
+    <%= t.include("partials/_head.html") %>
+
+  </head>
+
+  <%= !json.project.embedded ? "<body>" : "<body is='responsive-body'>" %>
+
+    <div class="overlay-instructions" id="instructions-overlay">
+      <div class="instructions-box" id="instructions-box">
+        <div class="close-button" id="close-data-box"><i class="fa fa-times" aria-hidden="true"></i></div>
+        <div class="instructions"><%=json.plaza_poll["Instructions-Blank"]%></div>
+      </div>
+      <div class="instructions-box" id="instructions-box-writein">
+        <div class="close-button" id="close-data-box-writein"><i class="fa fa-times" aria-hidden="true"></i></div>
+        <div class="instructions"><%=json.plaza_poll["Instructions-Nowritein"]%></div>
+      </div>
+    </div>
+
+    <div id="stick-here"></div>
+
+    <div class="poll-container">
+
+      <div id="poll-question">
+
+        <div class="plaza-img">
+          <img src="http://ww2.hdnux.com/photos/61/64/55/<%=json.plaza_poll.Image%>/5/1500x0.jpg"></img>
+          <div class="caption"><%=json.plaza_poll.Caption%> <span class="byline"><%=json.plaza_poll.Photographer%>/span></div>
+        </div>
+
+        <div class="question"><%=json.plaza_poll.Question%></div>
+
+        <% json.plaza_poll.answers.forEach(function(d,dIDX){ %>
+
+          <div id="answer<%=dIDX%>"><span class="answer" id="answer<%=dIDX%>icon"><i class="fa fa-square-o" aria-hidden="true"></i></span><span id="answer<%=dIDX%>text"><%=d.Answer%></span></div>
+
+        <% }); %>
+
+        <div id="writein"><span class="answer" id="writeinicon"><i class="fa fa-square-o" aria-hidden="true"></i></span><input placeholder="Write-in name" id="writeininput"></input></span></div>
+
+        <div class="submit-answer button" id="submit"><%=json.plaza_poll.Submit%></div>
+
+      </div>
+
+      <div id="poll-results" class="hide">
+        <div class="poll-hed"><%=json.plaza_poll["Poll-Hed"]%></div>
+        <div class="poll-deck"><%=json.plaza_poll["Poll-Deck"].replace("INSERTHERE","<span id='your-vote'></span>")%></div>
+        <div id="results-chart"></div>
+      </div>
+
+    </div>
+
+
+    <script src="app.js" async></script>
+    <%= t.include("partials/_helloSFC.html") %>
+
+  </body>
+</html>

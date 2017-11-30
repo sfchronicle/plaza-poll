@@ -17,6 +17,7 @@ function titleCase(str) {
 var clickAnswer = document.getElementsByClassName("answer");
 var prevClick;
 var chosenName;
+var savedVote;
 
 for (var i = 0; i < clickAnswer.length; i++) {
   clickAnswer[i].addEventListener('click', function() {
@@ -36,22 +37,18 @@ for (var i = 0; i < clickAnswer.length; i++) {
 }
 
 var questionHeight = $("#poll-question").height();
-
 var windowWidth = $(window).width();
-console.log("window width = ");
-console.log(windowWidth);
 var width = Math.min(windowWidth,536);
-console.log(width);
 
 // setting sizes of interactive
 var margin = {
-  top: 50,
+  top: 40,
   right: 50,
-  bottom: 50,
+  bottom: 0,
   left: 100
 };
 width = width - margin.left - margin.right;
-var height = questionHeight - margin.top - margin.bottom - 100;
+var height = Math.min(questionHeight - margin.top - margin.bottom,400);
 
 function draw_future() {
 
@@ -178,10 +175,8 @@ document.getElementById("submit").addEventListener("click", function() {
     document.getElementById("instructions-overlay").classList.add("active");
   } else {
     console.log("there is no cookie");
-
     if (prevClick){
       if (prevClick.id == "writeinicon") {
-        console.log(document.getElementById("writeininput").value);
         if (document.getElementById("writeininput").value) {
           chosenName = document.getElementById("writeininput").value;
         } else {
@@ -196,7 +191,7 @@ document.getElementById("submit").addEventListener("click", function() {
       $("#poll-results").removeClass("hide");
 
       document.getElementById("your-vote").innerHTML = chosenName;
-      document.getElementById("poll-results").style.height = questionHeight+"px";
+      // document.getElementById("poll-results").style.height = questionHeight+"px";
       var pos = $("#stick-here").offset().top-37;
       $('body, html').animate({scrollTop: pos});
 
@@ -204,7 +199,8 @@ document.getElementById("submit").addEventListener("click", function() {
       document.getElementById("instructions-box").classList.add("active");
       document.getElementById("instructions-overlay").classList.add("active");
     }
-    setCookie("voted", "vote", 7)
+    setCookie("voted", chosenName, 7);
+    savedVote = chosenName;
   }
 
 });
@@ -234,12 +230,27 @@ function getCookie(cname) {
 
 function checkCookie() {
     var vote = getCookie("voted");
+    savedVote = getCookie("voted");
     if (vote != "") {
       return 1;
     } else {
       return 0;
     }
 }
+
+// show the results
+document.getElementById("see-results").addEventListener("click",function() {
+  $("#poll-question").addClass("hide");
+  $("#poll-results").removeClass("hide");
+
+  document.getElementById("your-vote").innerHTML = savedVote;
+  // document.getElementById("poll-results").style.height = questionHeight+"px";
+  var pos = $("#stick-here").offset().top-37;
+  $('body, html').animate({scrollTop: pos});
+
+  document.getElementById("instructions-box-cookie").classList.remove("active");
+  document.getElementById("instructions-overlay").classList.remove("active");
+});
 
 // hide the about the data box
 document.getElementById("close-data-box").addEventListener("click",function() {

@@ -28,9 +28,13 @@
       </div>
       <div class="instructions-box" id="instructions-box-cookie">
         <div class="close-button" id="close-data-box-cookie"><i class="fa fa-times" aria-hidden="true"></i></div>
-        <div class="instructions">You already voted! Thank you for voting but you can only vote once.</div>
+        <div class="instructions">You already voted! Thank you for voting but you can only vote once.
+          <div class="see-results button" id="see-results">See results</div>
+        </div>
       </div>
     </div>
+
+    <div class="banner">San Francisco Chronicle Poll</div>
 
     <div id="stick-here"></div>
 
@@ -38,16 +42,16 @@
 
       <div id="poll-question">
 
-        <!-- <div class="plaza-img">
-          <img src="http://ww2.hdnux.com/photos/61/64/55/<%=json.plaza_poll.Image%>/5/1500x0.jpg"></img>
-          <div class="caption"><%=json.plaza_poll.Caption%> <span class="byline"><%=json.plaza_poll.Photographer%>/span></div>
-        </div> -->
+        <div class="plaza-img">
+          <img src="./assets/photos/place0816.7.jpg"></img>
+          <div class="caption"><span class="byline">Gabrielle Lurie, The Chronicle</div>
+        </div>
 
         <div class="question"><%=json.plaza_poll.Question%></div>
 
         <% json.plaza_poll.answers.forEach(function(d,dIDX){ %>
 
-          <div id="answer<%=dIDX%>"><span class="answer" id="answer<%=dIDX%>icon"><i class="fa fa-square-o" aria-hidden="true"></i></span><span id="answer<%=dIDX%>text"><%=d.Answer%></span></div>
+          <div id="answer<%=dIDX%>"><span class="answer" id="answer<%=dIDX%>icon"><i class="fa fa-square-o" aria-hidden="true"></i></span><span class="answer-text" id="answer<%=dIDX%>text"><%=d.Answer%></span></div>
 
         <% }); %>
 
@@ -60,7 +64,32 @@
       <div id="poll-results" class="hide">
         <div class="poll-hed"><%=json.plaza_poll["Poll-Hed"]%></div>
         <div class="poll-deck"><%=json.plaza_poll["Poll-Deck"].replace("INSERTHERE","<span id='your-vote'></span>")%></div>
+        <div class="social-wrapper">
+          <div class="link social email">
+            <a id="mail-icon" title="Share via email" href="mailto:?subject=<%= grunt.data.json.project.title %>&body=<%= grunt.data.json.project.description %>%0A%0Ahttp%3A%2F%2Fprojects.sfchronicle.com%2F<%= grunt.data.json.project.year %>%2F<%= grunt.data.json.project.slug %>">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+            </a>
+          </div>
+
+          <div class="link social">
+            <a id="facebook-icon" title="Share on Facebook" href="#" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fprojects.sfchronicle.com%2F<%= grunt.data.json.project.year %>%2F<%= grunt.data.json.project.slug %>', 'facebook-share-dialog', 'width=626,height=436'); return false;">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </div>
+
+          <div class="link social">
+            <a id="twitter-icon" title="Share on Twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fprojects.sfchronicle.com%2F<%= grunt.data.json.project.year %>%2F<%= grunt.data.json.project.slug %>&text=<%= grunt.data.json.project.twitter_text %>&hashtags=<%= grunt.data.json.project.hashtag %>">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </div>
+        </div>
         <div id="results-chart"></div>
+      </div>
+
+      <div class="credit-container">
+        <div class="credit">Poll by <a href="mailto:torourke@sfchronicle.com">Tim O'Rourke</a></div>
+        <div class="credit">Interactive producer: <a href="mailto:eoneill@sfchronicle.com">Emma O'Neill</a></div>
+        <div class="credit">Developer: <a href="mailto:cwirtanen@sfchronicle.com">Clint Wirtanen</a></div>
       </div>
 
     </div>

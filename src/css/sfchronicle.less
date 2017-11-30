@@ -37,17 +37,10 @@ main {
 }
 
 a {
-  color: @gray-blue;
   text-decoration: none;
   outline: 0 !important;
-  &:hover {
-    color: darken(@gray-blue,10%);
-  }
   img {
     border: none;
-  }
-  :hover {
-    color: darken(@gray-blue,10%);
   }
 }
 
@@ -85,7 +78,7 @@ p {
 
   a {
     text-decoration: none;
-    color: @gray-blue;
+    // color: @gray-blue;
   }
 
   @media @mobile {
@@ -151,20 +144,24 @@ li {
 }
 .source, .credit {
   clear: left;
-  padding-top: 10px;
+  padding-top: 3px;
   font-size: 12px;
   // color: @white;
   font-style: italic;
   font-family: @med-graphics;
-  @media @tablet {
-    padding: 10px 20px;
-  }
-  @media @mobile {
-    padding: 10px;
-  }
+  // @media @tablet {
+  //   padding: 10px 20px;
+  // }
+  // @media @mobile {
+  //   padding: 10px;
+  // }
   &.padded {
     padding-bottom: 40px;
   }
+}
+
+.credit-container {
+  padding-top: 50px;
 }
 
 svg {
@@ -245,7 +242,7 @@ text {
 }
 
 .specialhead-top {
-  color: @gray-blue;
+  // color: @gray-blue;
   font-family: @banner;
   font-size: 18px;
   text-transform: uppercase;
@@ -278,6 +275,10 @@ text {
   height: 37px;
 }
 
+.social-wrapper {
+  margin-top: 10px;
+}
+
 .link {
   padding: 5px 10px 0 7px;
   vertical-align: 3px;
@@ -290,22 +291,22 @@ text {
     color: @dark-gray;
   }
 
-  &.special {
-    a {
-      color: @gray-blue;
-    }
-  }
+  // &.special {
+    // a {
+    //   color: @gray-blue;
+    // }
+  // }
   &.social {
-    float: right;
-    margin: 0 6px;
+    // float: right;
+    margin: 0 4px;
     padding: 4px 2px;
-    a {
-      color: @gray-blue;
-    }
+    // a {
+    //   color: @gray-blue;
+    // }
   }
-  &.email {
-    margin-right: 10px;
-  }
+  // &.email {
+  //   margin-right: px;
+  // }
 }
 .logo-link {
   cursor: pointer;
@@ -378,7 +379,7 @@ header {
   text-align: left;
   font-family: @med-graphics;
   font-size: 12px;
-  margin-top: 5px;
+  // margin-top: 5px;
   padding: 0 10px;
   max-width: 100%;
   &.landing {

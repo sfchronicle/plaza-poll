@@ -238,6 +238,12 @@ function checkCookie() {
     }
 }
 
+if (screen.width <= 480) {
+  var scrolloffset = 70;
+} else {
+  var scrolloffset = 35;
+}
+
 // show the results
 document.getElementById("see-results").addEventListener("click",function() {
   $("#poll-question").addClass("hide");
@@ -245,7 +251,7 @@ document.getElementById("see-results").addEventListener("click",function() {
 
   document.getElementById("your-vote").innerHTML = savedVote;
   // document.getElementById("poll-results").style.height = questionHeight+"px";
-  var pos = $("#stick-here").offset().top-37;
+  var pos = $("#stick-here").offset().top - scrolloffset;
   $('body, html').animate({scrollTop: pos});
 
   document.getElementById("instructions-box-cookie").classList.remove("active");

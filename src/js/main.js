@@ -170,32 +170,76 @@ draw_future();
 
 document.getElementById("submit").addEventListener("click", function() {
 
-  if (prevClick){
-    if (prevClick.id == "writeinicon") {
-      console.log(document.getElementById("writeininput").value);
-      if (document.getElementById("writeininput").value) {
-        chosenName = document.getElementById("writeininput").value;
-      } else {
-        document.getElementById("instructions-box-writein").classList.add("active");
-        document.getElementById("instructions-overlay").classList.add("active");
+  var cookie = checkCookie();
+
+  if (cookie) {
+    console.log("there is a cookie");
+    document.getElementById("instructions-box-cookie").classList.add("active");
+    document.getElementById("instructions-overlay").classList.add("active");
+  } else {
+    console.log("there is no cookie");
+
+    if (prevClick){
+      if (prevClick.id == "writeinicon") {
+        console.log(document.getElementById("writeininput").value);
+        if (document.getElementById("writeininput").value) {
+          chosenName = document.getElementById("writeininput").value;
+        } else {
+          document.getElementById("instructions-box-writein").classList.add("active");
+          document.getElementById("instructions-overlay").classList.add("active");
+        }
       }
     }
+
+    if (prevClick && chosenName) {
+      $("#poll-question").addClass("hide");
+      $("#poll-results").removeClass("hide");
+
+      document.getElementById("your-vote").innerHTML = chosenName;
+      document.getElementById("poll-results").style.height = questionHeight+"px";
+      var pos = $("#stick-here").offset().top-37;
+      $('body, html').animate({scrollTop: pos});
+
+    } else {
+      document.getElementById("instructions-box").classList.add("active");
+      document.getElementById("instructions-overlay").classList.add("active");
+    }
+    setCookie("voted", "vote", 7)
   }
 
-  if (prevClick && chosenName) {
-    $("#poll-question").addClass("hide");
-    $("#poll-results").removeClass("hide");
-
-    document.getElementById("your-vote").innerHTML = chosenName;
-    document.getElementById("poll-results").style.height = questionHeight+"px";
-    var pos = $("#stick-here").offset().top-37;
-    $('body, html').animate({scrollTop: pos});
-
-  } else {
-    document.getElementById("instructions-box").classList.add("active");
-    document.getElementById("instructions-overlay").classList.add("active");
-  }
 });
+
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie() {
+    var vote = getCookie("voted");
+    if (vote != "") {
+      return 1;
+    } else {
+      return 0;
+    }
+}
 
 // hide the about the data box
 document.getElementById("close-data-box").addEventListener("click",function() {
@@ -206,5 +250,11 @@ document.getElementById("close-data-box").addEventListener("click",function() {
 // hide the about the data box
 document.getElementById("close-data-box-writein").addEventListener("click",function() {
   document.getElementById("instructions-box-writein").classList.remove("active");
+  document.getElementById("instructions-overlay").classList.remove("active");
+});
+
+// hide the about the data box
+document.getElementById("close-data-box-cookie").addEventListener("click",function() {
+  document.getElementById("instructions-box-cookie").classList.remove("active");
   document.getElementById("instructions-overlay").classList.remove("active");
 });

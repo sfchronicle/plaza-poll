@@ -3,22 +3,12 @@ var d3 = require('d3');
 
 var formatthousands = d3.format(",");
 
-// convert names to camel case
-function titleCase(str) {
-  return str
-    .toLowerCase()
-    .split(' ')
-    .map(function(word) {
-        return word[0].toUpperCase() + word.substr(1);
-    })
-    .join(' ');
-}
-
 var clickAnswer = document.getElementsByClassName("answer");
 var prevClick;
 var chosenName;
 var savedVote;
 
+// event listeners for answer options
 for (var i = 0; i < clickAnswer.length; i++) {
   clickAnswer[i].addEventListener('click', function() {
     if (prevClick) {
@@ -32,7 +22,6 @@ for (var i = 0; i < clickAnswer.length; i++) {
     } else {
       chosenName = document.getElementById(this.id.substring(0,7)+"text").innerHTML;
     }
-
   }, false);
 }
 
@@ -44,8 +33,8 @@ var width = Math.min(windowWidth,536);
 var margin = {
   top: 40,
   right: 50,
-  bottom: 0,
-  left: 100
+  bottom: 10,
+  left: 160
 };
 width = width - margin.left - margin.right;
 var height = Math.min(questionHeight - margin.top - margin.bottom,400);
@@ -55,18 +44,25 @@ function draw_future() {
   // show tooltip
   var future_tooltip = d3.select("body")
       .append("div")
-      .attr("class","future_tooltip")
+      .attr("class","tooltip")
       .style("position", "absolute")
       .style("z-index", "10")
       .style("visibility", "hidden")
 
-  d3.json("http://extras.sfgate.com/editorial/droughtwatch/reservoirs.json", function(barData){
+  d3.json("https://hcyqzeoa9b.execute-api.us-west-1.amazonaws.com/v1/polls/0/getresults", function(voteData){
 
-    console.log(barData);
+    var barData = [];
 
-    barData.data.forEach(function(d){
-      d.name = titleCase(d.name).split('(')[0];
+    pollOptions.forEach(function(d){
+      var tempCount = 0;
+      for (var idx=0; idx<voteData.length; idx++) {
+        if (voteData[idx].name.S == d.Answer) {
+          tempCount = voteData[idx].votes.N;
+        }
+      }
+      barData.push( { "name" : d.Answer, "votes" : tempCount} );
     });
+    console.log(barData);
 
     // x-axis scale
     var x = d3.scaleLinear()
@@ -76,19 +72,8 @@ function draw_future() {
     var y = d3.scaleBand()
         .range([height, 0]);
 
-    x.domain([0, 5000]);
-    y.domain(barData.data.map(function(d) { return d.name; })).padding(0.1);
-
-    // var xAxis = d3.svg.axis()
-    //     .scale(x)
-    //     .orient("bottom");
-    //
-    // // use y-axis scale to set y-axis
-  	// var yAxis = d3.svg.axis()
-  	// 		.scale(y)
-  	// 		.orient("left")
-  	// 		.tickFormat(d3.format(".2s"));
-
+    x.domain([0, Math.max(d3.max(barData, function(d) { return +d.votes; }),10)]);
+    y.domain(barData.map(function(d) { return d.name; })).padding(0.1);
 
     // create SVG container for chart components
   	var svgBars = d3.select("#results-chart").append("svg")
@@ -97,33 +82,27 @@ function draw_future() {
   			.append("g")
   			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // svgBars.append("g")
-    //     .attr("class", "x axis")
-    //    	.attr("transform", "translate(0," + height + ")")
-    //   	.call(d3.axisBottom(x).ticks(5).tickFormat(function(d) { return parseInt(d / 1000); }).tickSizeInner([-height]));
-
     svgBars.append("g")
         .attr("class", "y axis")
         .call(d3.axisLeft(y));
 
     svgBars.selectAll("bar")
-        .data(barData.data)
+        .data(barData)
       .enter().append("rect")
         .style("fill", "#696969")
         .attr("x", 0)
         .attr("width", function(d) {
-          return width - x(+d.capacity/1000);
+          return x(+d.votes);
         })
         .attr("y",  function(d) {
           return y(d.name);
         })
         .attr("height",y.bandwidth())
         .on("mouseover", function(d) {
-          // future_tooltip.html(`
-          //     <div>Reservoir: <b>${d.name}</b></div>
-          //     <div>Storage: <b>${formatthousands(Math.round(d.storage/1000))} TAF</b></div>
-          //     <div>Capacity: <b>${formatthousands(Math.round(d.capacity/1000))} TAF</b></div>
-          // `);
+          future_tooltip.html(`
+              <div><b>${d.name}</b></div>
+              <div>Votes: <b>${d.votes}</b></div>
+          `);
           future_tooltip.style("visibility", "visible");
         })
         .on("mousemove", function(d) {
@@ -139,71 +118,69 @@ function draw_future() {
         })
         .on("mouseout", function(){return future_tooltip.style("visibility", "hidden");});
 
-    // svgBars.append("g")
-    //     .attr("class", "x axis")
-    //     .attr("transform", "translate(0," + height + ")")
-    //     .call(xAxis)
-    //   .selectAll("text")
-    //     .style("text-anchor", "end")
-    //     .attr("dx", "-.8em")
-    //     .attr("dy", "-.55em")
-    //     .attr("transform", "rotate(-65)" );
-    //
-    // svgBars.append("g")
-    //     .attr("class", "y axis")
-    //     .call(yAxis)
-    //   .append("text")
-    //     .attr("transform", "rotate(-90)")
-    //     .attr("y", 6)
-    //     .attr("dy", ".71em")
-    //     .style("text-anchor", "end")
-    //     .text("Reservoir levels (TAF)");
-
   });
 
 }
 
-draw_future();
-
 document.getElementById("submit").addEventListener("click", function() {
 
-  var cookie = checkCookie();
-
-  if (cookie) {
-    console.log("there is a cookie");
-    document.getElementById("instructions-box-cookie").classList.add("active");
-    document.getElementById("instructions-overlay").classList.add("active");
-  } else {
-    console.log("there is no cookie");
-    if (prevClick){
-      if (prevClick.id == "writeinicon") {
-        if (document.getElementById("writeininput").value) {
-          chosenName = document.getElementById("writeininput").value;
-        } else {
-          document.getElementById("instructions-box-writein").classList.add("active");
-          document.getElementById("instructions-overlay").classList.add("active");
-        }
+  if (prevClick){
+    if (prevClick.id == "writeinicon") {
+      if (document.getElementById("writeininput").value) {
+        chosenName = document.getElementById("writeininput").value;
+      } else {
+        document.getElementById("instructions-box-writein").classList.add("active");
+        document.getElementById("instructions-overlay").classList.add("active");
       }
     }
+  }
 
-    if (prevClick && chosenName) {
-      $("#poll-question").addClass("hide");
-      $("#poll-results").removeClass("hide");
+  if (prevClick && chosenName) {
 
-      document.getElementById("your-vote").innerHTML = chosenName;
-      // document.getElementById("poll-results").style.height = questionHeight+"px";
-      var pos = $("#stick-here").offset().top-37;
-      $('body, html').animate({scrollTop: pos});
+    var resolvedProm = Promise.resolve(saveNewData());
 
-    } else {
-      document.getElementById("instructions-box").classList.add("active");
-      document.getElementById("instructions-overlay").classList.add("active");
-    }
-    setCookie("voted", chosenName, 7);
+    // save new data to file
+    resolvedProm.then(draw_future());
+
+    // show the bar chart instead of the question
+    $("#poll-question").addClass("hide");
+    $("#poll-results").removeClass("hide");
+
+    // insert info about the vote
+    document.getElementById("your-vote").innerHTML = chosenName;
+
+    // scroll down to chart
+    var pos = $("#stick-here").offset().top-37;
+    $('body, html').animate({scrollTop: pos});
+
+    // set cookie for vote
+    console.log("we are setting a cookie");
+    console.log(chosenName);
+    setCookie("voted", chosenName, 1);
+
+    // FIGURE OUT WHAT I'M DOING WITH THIS
     savedVote = chosenName;
+
+  } else {
+    document.getElementById("instructions-box").classList.add("active");
+    document.getElementById("instructions-overlay").classList.add("active");
   }
 
 });
+
+function saveNewData() {
+  var newSavedData = {"name":chosenName};
+  console.log("SENDING DATA ");
+  console.log(JSON.stringify(newSavedData));
+  $.ajax({
+      method: "POST",
+      data: JSON.stringify(newSavedData),
+      contentType: "application/json",
+      success: function(msg) { console.log("success"); },
+      error: function(msg) { console.log("fail"); },
+      url: "https://hcyqzeoa9b.execute-api.us-west-1.amazonaws.com/v1/polls/0/vote"
+    });
+}
 
 
 function setCookie(cname, cvalue, exdays) {
@@ -239,10 +216,29 @@ function checkCookie() {
 }
 
 if (screen.width <= 480) {
-  var scrolloffset = 70;
+  var scrolloffset = 0;//70;
 } else {
-  var scrolloffset = 35;
+  var scrolloffset = 20;
 }
+
+// load bar chart on load if there is a cookie
+window.onload = function() {
+
+  if (checkCookie()) {
+
+    draw_future();
+    $("#poll-question").addClass("hide");
+    $("#poll-results").removeClass("hide");
+
+    document.getElementById("your-vote").innerHTML = savedVote;
+    var pos = $("#stick-here").offset().top - scrolloffset;
+    // $('body, html').animate({scrollTop: pos});
+
+    document.getElementById("instructions-box-cookie").classList.remove("active");
+    document.getElementById("instructions-overlay").classList.remove("active");
+  }
+
+};
 
 // show the results
 document.getElementById("see-results").addEventListener("click",function() {

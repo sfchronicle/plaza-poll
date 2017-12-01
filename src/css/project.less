@@ -31,6 +31,7 @@ text {
 
 a {
   color: @dark-blue;
+  text-decoration: underline;
   &:hover {
     color: darken(@dark-blue,10%);
   }
@@ -47,6 +48,19 @@ a {
   margin-top: 30px;
   // text-transform: uppercase;
   border-bottom: 2px solid @dark-blue;
+}
+
+.source {
+  padding-top: 10px;
+}
+
+.tooltip {
+  background: lighten(@light-gray,15%);
+  border: 1px solid @light-gray;
+  font-size: 14px;
+  font-family: @med-graphics;
+  line-height: 1.4;
+  padding: 5px 10px;
 }
 
 .poll-container {

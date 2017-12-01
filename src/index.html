@@ -59,12 +59,12 @@
         </div>
       </div>
 
-      <div id="poll-question">
+      <div class="plaza-img">
+        <img src="./assets/photos/place0816.7.jpg"></img>
+        <div class="caption"><span class="byline">Gabrielle Lurie, The Chronicle</div>
+      </div>
 
-        <div class="plaza-img">
-          <img src="./assets/photos/place0816.7.jpg"></img>
-          <div class="caption"><span class="byline">Gabrielle Lurie, The Chronicle</div>
-        </div>
+      <div id="poll-question">
 
         <div class="question"><%=json.plaza_poll.Question%></div>
 
@@ -108,13 +108,18 @@
       </div>
 
       <div class="credit-container">
-        <div class="credit">Poll by <a href="mailto:torourke@sfchronicle.com">Tim O'Rourke</a></div>
+        <div class="credit">Poll by: <a href="mailto:torourke@sfchronicle.com">Tim O'Rourke</a></div>
         <div class="credit">Interactive producer: <a href="mailto:eoneill@sfchronicle.com">Emma O'Neill</a></div>
         <div class="credit">Developer: <a href="mailto:cwirtanen@sfchronicle.com">Clint Wirtanen</a></div>
+
+        <div class="source">Disclaimer: <%=json.plaza_poll["Disclaimer"]%></div>
       </div>
 
     </div>
 
+    <script>
+      var pollOptions = <%= JSON.stringify(json.plaza_poll.answers) %>;
+    </script>
 
     <script src="app.js" async></script>
     <%= t.include("partials/_helloSFC.html") %>

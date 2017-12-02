@@ -26,8 +26,10 @@ for (var i = 0; i < clickAnswer.length; i++) {
 }
 
 var questionHeight = $("#poll-question").height();
-var windowWidth = $(window).width();
+var windowWidth = $(window).width() - 60;
+console.log(windowWidth - 60);
 var width = Math.min(windowWidth,536);
+console.log(width);
 
 // setting sizes of interactive
 var margin = {
@@ -37,7 +39,13 @@ var margin = {
   left: 160
 };
 width = width - margin.left - margin.right;
-var height = Math.min(questionHeight - margin.top - margin.bottom,400);
+if (screen.width <= 480) {
+  var height = Math.min(questionHeight - margin.top - margin.bottom,250);
+} else {
+  var height = Math.min(questionHeight - margin.top - margin.bottom,400);
+}
+console.log("height is");
+console.log(height);
 
 function draw_future() {
 

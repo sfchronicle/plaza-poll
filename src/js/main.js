@@ -42,12 +42,34 @@ width = width - margin.left - margin.right;
 if (screen.width <= 480) {
   var height = Math.min(questionHeight - margin.top - margin.bottom,250);
 } else {
-  var height = Math.min(questionHeight - margin.top - margin.bottom,400);
+  var height = Math.min(questionHeight - margin.top - margin.bottom,300);
 }
 console.log("height is");
 console.log(height);
 
+function draw_social() {
+  var html_str = "";
+
+  // putting in specialized sharing links
+  html_str +="<div class='social-wrapper'>"
+
+  // twitter link
+  html_str += "<div class='link social'><a id='twitter-icon' title='Share on Twitter' href='https://twitter.com/intent/tweet?url=http%3A%2F%2Fprojects.sfchronicle.com%2F2017%2Fplaza-poll&text=Justin Herman Plaza is being renamed. What should S.F. call it? I voted for "+savedVote+"! Vote here: '><i class='fa fa-twitter'></i></a></div>";
+
+  // facebook link
+  html_str += "<div class='link social'><a id='facebook-icon' title='Share on Facebook' href='#' target='_blank' onclick='window.open(\"https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fprojects.sfchronicle.com%2F2017%2Fplaza-poll\", \"facebook-share-dialog\", \"width=626,height=436\"); return false;'><i class='fa fa-facebook'></i></a></div>";
+
+  // email link
+  html_str +="<div class='link social'><a id='mail-icon' title='Share via email' href='mailto:?subject=Take the poll: Rename S.F. plaza!&body=Justin Herman Plaza is being renamed. What should S.F. call it? I voted for "+savedVote+"! Vote for your favorite name here: http%3A%2F%2Fprojects.sfchronicle.com%2F2017%2Fplaza-poll'><i class='fa fa-envelope' aria-hidden='true'></i></a></div>";
+
+  html_str += "</div>"
+
+  document.querySelector("#personal-sharing-here").innerHTML = html_str;
+}
+
 function draw_future() {
+
+  draw_social();
 
   // show tooltip
   var future_tooltip = d3.select("body")
@@ -146,9 +168,10 @@ document.getElementById("submit").addEventListener("click", function() {
   if (prevClick && chosenName) {
 
     var resolvedProm = Promise.resolve(saveNewData());
+    console.log(resolvedProm);
 
     // save new data to file
-    resolvedProm.then(draw_future());
+    // resolvedProm.then(setTimeout(draw_future(),2000));
 
     // show the bar chart instead of the question
     $("#poll-question").addClass("hide");
@@ -184,7 +207,10 @@ function saveNewData() {
       method: "POST",
       data: JSON.stringify(newSavedData),
       contentType: "application/json",
-      success: function(msg) { console.log("success"); },
+      success: function(msg) {
+        console.log("success");
+        draw_future();
+      },
       error: function(msg) { console.log("fail"); },
       url: "https://hcyqzeoa9b.execute-api.us-west-1.amazonaws.com/v1/polls/0/vote"
     });
@@ -226,7 +252,7 @@ function checkCookie() {
 if (screen.width <= 480) {
   var scrolloffset = 0;//70;
 } else {
-  var scrolloffset = 20;
+  var scrolloffset = 10;
 }
 
 // load bar chart on load if there is a cookie

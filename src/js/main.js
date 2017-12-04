@@ -34,7 +34,7 @@ console.log(width);
 // setting sizes of interactive
 var margin = {
   top: 40,
-  right: 50,
+  right: 10,
   bottom: 10,
   left: 160
 };
@@ -148,6 +148,34 @@ function draw_future() {
         })
         .on("mouseout", function(){return future_tooltip.style("visibility", "hidden");});
 
+      svgBars.selectAll("bar")
+        .data(barData)
+        .enter()
+          .append("text")
+          .text(function (d) {
+            console.log(d.votes);
+            if (d.votes > 1){
+              return d.votes;
+            } else {
+              return "";
+            }
+          })
+          .attr("x", function (d) {
+            if (d.votes > 9) {
+              return x(+d.votes)-20
+            } else {
+              return x(+d.votes)-15
+            }
+          })
+          .attr("y", function (d) {
+            if (screen.width <=480) {
+              return y(d.name)+20;
+            } else {
+              return y(d.name)+25;
+            }
+          })
+          .style("fill", "white");
+
   });
 
 }
@@ -189,7 +217,6 @@ document.getElementById("submit").addEventListener("click", function() {
     console.log(chosenName);
     setCookie("voted", chosenName, 1);
 
-    // FIGURE OUT WHAT I'M DOING WITH THIS
     savedVote = chosenName;
 
   } else {

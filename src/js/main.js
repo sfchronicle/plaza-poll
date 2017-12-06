@@ -47,6 +47,9 @@ if (screen.width <= 480) {
 console.log("height is");
 console.log(height);
 
+var b = document.getElementsByTagName("a");
+b[4].setAttribute("target", "_blank");
+
 function draw_social() {
   var html_str = "";
 
@@ -153,7 +156,6 @@ function draw_future() {
         .enter()
           .append("text")
           .text(function (d) {
-            console.log(d.votes);
             if (d.votes > 1){
               return d.votes;
             } else {

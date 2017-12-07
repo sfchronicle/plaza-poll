@@ -27,9 +27,7 @@ for (var i = 0; i < clickAnswer.length; i++) {
 
 var questionHeight = $("#poll-question").height();
 var windowWidth = $(window).width() - 60;
-console.log(windowWidth - 60);
 var width = Math.min(windowWidth,536);
-console.log(width);
 
 // setting sizes of interactive
 var margin = {
@@ -44,8 +42,6 @@ if (screen.width <= 480) {
 } else {
   var height = Math.min(questionHeight - margin.top - margin.bottom,300);
 }
-console.log("height is");
-console.log(height);
 
 var b = document.getElementsByTagName("a");
 b[4].setAttribute("target", "_blank");
@@ -95,7 +91,6 @@ function draw_future() {
       }
       barData.push( { "name" : d.Answer, "votes" : tempCount} );
     });
-    console.log(barData);
 
     // x-axis scale
     var x = d3.scaleLinear()
@@ -197,11 +192,8 @@ document.getElementById("submit").addEventListener("click", function() {
 
   if (prevClick && chosenName) {
 
-    var resolvedProm = Promise.resolve(saveNewData());
-    console.log(resolvedProm);
-
-    // save new data to file
-    // resolvedProm.then(setTimeout(draw_future(),2000));
+    saveNewData();
+    // setTimeout(draw_future(),2000);
 
     // show the bar chart instead of the question
     $("#poll-question").addClass("hide");

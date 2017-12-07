@@ -193,7 +193,6 @@ document.getElementById("submit").addEventListener("click", function() {
   if (prevClick && chosenName) {
 
     saveNewData();
-    // setTimeout(draw_future(),2000);
 
     // show the bar chart instead of the question
     $("#poll-question").addClass("hide");
@@ -209,7 +208,7 @@ document.getElementById("submit").addEventListener("click", function() {
     // set cookie for vote
     console.log("we are setting a cookie");
     console.log(chosenName);
-    setCookie("voted", chosenName, 1);
+    setCookie("voted", chosenName, 1000);
 
     savedVote = chosenName;
 

@@ -57,13 +57,13 @@ function draw_social() {
   html_str +="<div class='social-wrapper'>"
 
   // twitter link
-  html_str += "<div class='link social'><a id='twitter-icon' title='Share on Twitter' href='https://twitter.com/intent/tweet?url=http%3A%2F%2Fprojects.sfchronicle.com%2F2017%2Fplaza-poll&text=Justin Herman Plaza is being renamed. What should S.F. call it? I voted for "+savedVote+"! Vote here: '><i class='fa fa-twitter'></i></a></div>";
+  html_str += "<div class='link social'><a id='twitter-icon' title='Share on Twitter' href='https://twitter.com/intent/tweet?url=http%3A%2F%2Fprojects.sfchronicle.com%2F2017%2Fplaza-poll&text=What should we call SF&#39;s Justin Herman Plaza? I voted for "+savedVote+"! Vote for your favorite here: '><i class='fa fa-twitter'></i></a></div>";
 
   // facebook link
   html_str += "<div class='link social'><a id='facebook-icon' title='Share on Facebook' href='#' target='_blank' onclick='window.open(\"https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fprojects.sfchronicle.com%2F2017%2Fplaza-poll\", \"facebook-share-dialog\", \"width=626,height=436\"); return false;'><i class='fa fa-facebook'></i></a></div>";
 
   // email link
-  html_str +="<div class='link social'><a id='mail-icon' title='Share via email' href='mailto:?subject=Take the poll: Rename S.F. plaza!&body=Justin Herman Plaza is being renamed. What should S.F. call it? I voted for "+savedVote+"! Vote for your favorite name here: http%3A%2F%2Fprojects.sfchronicle.com%2F2017%2Fplaza-poll'><i class='fa fa-envelope' aria-hidden='true'></i></a></div>";
+  html_str +="<div class='link social'><a id='mail-icon' title='Share via email' href='mailto:?subject=Poll: What should we call SF&#39;s Justin Herman Plaza?&body=San Francisco supervisors have voted to strip Justin Herman&#39;s name from the plaza along the Embarcadero. What should be the new name for the public space? I voted for "+savedVote+"! Vote for your favorite here: http%3A%2F%2Fprojects.sfchronicle.com%2F2017%2Fplaza-poll'><i class='fa fa-envelope' aria-hidden='true'></i></a></div>";
 
   html_str += "</div>"
 

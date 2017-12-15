@@ -158,7 +158,9 @@ function draw_future() {
             }
           })
           .attr("x", function (d) {
-            if (d.votes > 9) {
+            if (d.votes > 99) {
+              return x(+d.votes)-30
+            } else if (d.votes > 9) {
               return x(+d.votes)-20
             } else {
               return x(+d.votes)-15

@@ -129,7 +129,7 @@ function draw_future() {
         .on("mouseover", function(d) {
           future_tooltip.html(`
               <div><b>${d.name}</b></div>
-              <div>Votes: <b>${d.votes}</b></div>
+              <div>Votes: <b>${formatthousands(d.votes)}</b></div>
           `);
           future_tooltip.style("visibility", "visible");
         })
@@ -151,17 +151,15 @@ function draw_future() {
         .enter()
           .append("text")
           .text(function (d) {
-            if (d.votes > 1){
-              return d.votes;
+            if (d.votes > 1000){
+              return formatthousands(d.votes);
             } else {
               return "";
             }
           })
           .attr("x", function (d) {
-            if (d.votes > 99) {
-              return x(+d.votes)-30
-            } else if (d.votes > 9) {
-              return x(+d.votes)-20
+            if (d.votes > 1000) {
+              return x(+d.votes)-70
             } else {
               return x(+d.votes)-15
             }

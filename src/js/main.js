@@ -151,7 +151,7 @@ function draw_future() {
         .enter()
           .append("text")
           .text(function (d) {
-            if (d.votes > 1000){
+            if (d.votes > 10000){
               return formatthousands(d.votes);
             } else {
               return "";
@@ -176,6 +176,116 @@ function draw_future() {
   });
 
 }
+
+function draw_final_results() {
+
+  // show tooltip
+  var future_tooltip = d3.select("body")
+      .append("div")
+      .attr("class","tooltip")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("visibility", "hidden")
+
+  d3.json("https://hcyqzeoa9b.execute-api.us-west-1.amazonaws.com/v1/polls/0/getresults", function(voteData){
+
+    var barData = [];
+
+    pollOptions.forEach(function(d){
+      var tempCount = 0;
+      for (var idx=0; idx<voteData.length; idx++) {
+        if (voteData[idx].name.S == d.Answer) {
+          tempCount = voteData[idx].votes.N;
+        }
+      }
+      barData.push( { "name" : d.Answer, "votes" : tempCount} );
+    });
+
+    // x-axis scale
+    var x = d3.scaleLinear()
+        .range([0, width]);
+
+    // y-axis scale
+    var y = d3.scaleBand()
+        .range([height, 0]);
+
+    x.domain([0, Math.max(d3.max(barData, function(d) { return +d.votes; }),10)]);
+    y.domain(barData.map(function(d) { return d.name; })).padding(0.1);
+
+    // create SVG container for chart components
+  	var svgBars = d3.select("#results-chart-final").append("svg")
+  			.attr("width", width + margin.left + margin.right)
+  			.attr("height", height + margin.top + margin.bottom)
+  			.append("g")
+  			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svgBars.append("g")
+        .attr("class", "y axis")
+        .call(d3.axisLeft(y));
+
+    svgBars.selectAll("bar")
+        .data(barData)
+      .enter().append("rect")
+        .style("fill", "#696969")
+        .attr("x", 0)
+        .attr("width", function(d) {
+          return x(+d.votes);
+        })
+        .attr("y",  function(d) {
+          return y(d.name);
+        })
+        .attr("height",y.bandwidth())
+        .on("mouseover", function(d) {
+          future_tooltip.html(`
+              <div><b>${d.name}</b></div>
+              <div>Votes: <b>${formatthousands(d.votes)}</b></div>
+          `);
+          future_tooltip.style("visibility", "visible");
+        })
+        .on("mousemove", function(d) {
+          if (screen.width <= 480) {
+            return future_tooltip
+              .style("top", (d3.event.pageY+20)+"px")
+              .style("left",d3.event.pageX/2+20+"px");
+          } else {
+            return future_tooltip
+              .style("top", (d3.event.pageY+20)+"px")
+              .style("left",(d3.event.pageX-80)+"px");
+          }
+        })
+        .on("mouseout", function(){return future_tooltip.style("visibility", "hidden");});
+
+      svgBars.selectAll("bar")
+        .data(barData)
+        .enter()
+          .append("text")
+          .text(function (d) {
+            if (d.votes > 10000){
+              return formatthousands(d.votes);
+            } else {
+              return "";
+            }
+          })
+          .attr("x", function (d) {
+            if (d.votes > 1000) {
+              return x(+d.votes)-70
+            } else {
+              return x(+d.votes)-15
+            }
+          })
+          .attr("y", function (d) {
+            if (screen.width <=480) {
+              return y(d.name)+20;
+            } else {
+              return y(d.name)+25;
+            }
+          })
+          .style("fill", "white");
+
+  });
+
+}
+
 
 document.getElementById("submit").addEventListener("click", function() {
 
@@ -278,6 +388,12 @@ if (screen.width <= 480) {
 // load bar chart on load if there is a cookie
 window.onload = function() {
 
+  // IF POLL IS CLOSED, KEEP --------------------------------------------------------------
+  // draw_final_results();
+  // $("#poll-question").addClass("hide");
+  // IF POLL IS CLOSED, KEEP --------------------------------------------------------------
+
+  // IF POLL IS OPEN, KEEP --------------------------------------------------------------
   if (checkCookie()) {
 
     draw_future();
@@ -291,6 +407,7 @@ window.onload = function() {
     document.getElementById("instructions-box-cookie").classList.remove("active");
     document.getElementById("instructions-overlay").classList.remove("active");
   }
+  // IF POLL IS OPEN, KEEP --------------------------------------------------------------
 
 };
 

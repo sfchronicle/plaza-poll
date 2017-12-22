@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="__sync_contentCategory" content="free">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="style.css?2">
+    <link rel="stylesheet" type="text/css" href="style.css?3">
 
     <%= t.include("partials/_paywall.html") %>
     <%= t.include("partials/_embedframe.html") %>
@@ -84,6 +84,7 @@
       <div id="stick-here"></div>
 
       <div id="poll-results" class="hide">
+        <div class="poll-closed"><%=json.plaza_poll["Poll-Closed"]%></div>
         <div class="poll-hed"><%=json.plaza_poll["Poll-Hed"]%></div>
         <div class="poll-deck"><%=json.plaza_poll["Poll-Deck"].replace("INSERTHERE","<span id='your-vote'></span>")%></div>
         <div id="personal-sharing-here"></div>
@@ -103,7 +104,7 @@
       var pollOptions = <%= JSON.stringify(json.plaza_poll.answers) %>;
     </script>
 
-    <script src="app.js?3" async></script>
+    <script src="app.js?4" async></script>
     <%= t.include("partials/_helloSFC.html") %>
 
   </body>
